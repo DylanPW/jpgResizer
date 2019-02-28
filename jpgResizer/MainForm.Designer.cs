@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.openLocation = new System.Windows.Forms.TextBox();
             this.openButton = new System.Windows.Forms.Button();
@@ -43,15 +42,12 @@
             this.resizeButton = new System.Windows.Forms.Button();
             this.resizePercentageBox = new System.Windows.Forms.NumericUpDown();
             this.jpegQualityBox = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resizePercentageSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.jpegQualitySlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resizePercentageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.jpegQualityBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "Open Image";
             // 
             // label1
             // 
@@ -149,7 +145,7 @@
             // 
             // resizeButton
             // 
-            this.resizeButton.Location = new System.Drawing.Point(16, 176);
+            this.resizeButton.Location = new System.Drawing.Point(16, 165);
             this.resizeButton.Name = "resizeButton";
             this.resizeButton.Size = new System.Drawing.Size(373, 23);
             this.resizeButton.TabIndex = 12;
@@ -183,11 +179,21 @@
             this.jpegQualityBox.TabIndex = 14;
             this.jpegQualityBox.ValueChanged += new System.EventHandler(this.jpegQualityBox_ValueChanged);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(329, 191);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(60, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Version 0.2";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 211);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.jpegQualityBox);
             this.Controls.Add(this.resizePercentageBox);
             this.Controls.Add(this.resizeButton);
@@ -202,7 +208,12 @@
             this.Controls.Add(this.openLocation);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(416, 250);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(416, 250);
             this.Name = "MainForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Text = "JPEG Resizer";
             ((System.ComponentModel.ISupportInitialize)(this.resizePercentageSlider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.jpegQualitySlider)).EndInit();
@@ -214,8 +225,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox openLocation;
         private System.Windows.Forms.Button openButton;
@@ -229,6 +238,7 @@
         private System.Windows.Forms.TextBox saveLocation;
         private System.Windows.Forms.NumericUpDown resizePercentageBox;
         private System.Windows.Forms.NumericUpDown jpegQualityBox;
+        private System.Windows.Forms.Label label5;
     }
 }
 

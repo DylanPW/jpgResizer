@@ -26,6 +26,77 @@ namespace jpgResizer
         }
 
         /// <summary>
+        /// create a tempfile 
+        /// </summary>
+        /// <returns></returns>
+        private static string CreateTempFile()
+        {
+            string fileName = string.Empty;
+
+            try
+            {
+                // Get the full name of the newly created Temporary file. 
+                // Note that the GetTempFileName() method actually creates
+                // a 0-byte file and returns the name of the created file.
+                fileName = Path.GetTempFileName();
+
+                // Craete a FileInfo object to set the file's attributes
+                FileInfo fileInfo = new FileInfo(fileName);
+
+                // Set the Attribute property of this file to Temporary. 
+                // Although this is not completely necessary, the .NET Framework is able 
+                // to optimize the use of Temporary files by keeping them cached in memory.
+                fileInfo.Attributes = FileAttributes.Temporary;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An Error Occured, please check your inputs.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return fileName;
+        }
+
+        /// <summary>
+        /// Copy the temp file
+        /// </summary>
+        /// <param name="tmpFile"></param>
+        private static void CopyTmpFile(string tmpFile, string savelocation)
+        {
+            try
+            {
+                // Read from the temp file.
+                var img = Image.FromFile(tmpFile, true);
+                img.Save(savelocation);
+                img.Dispose();
+                DeleteTmpFile(tmpFile);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An Error Occured, please check your inputs.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Delete the tempfile
+        /// </summary>
+        /// <param name="tmpFile"></param>
+        private static void DeleteTmpFile(string tmpFile)
+        {
+            try
+            {
+                // Delete the temp file (if it exists)
+                if (File.Exists(tmpFile))
+                {
+                    File.Delete(tmpFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An Error Occured, please check your inputs.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
         /// Resize the image to the specified width and height.
         /// </summary>
         /// <param name="image">The image to resize.</param>
@@ -116,53 +187,71 @@ namespace jpgResizer
         /// <summary>
         /// Click event for the resize button.
         /// Where all the magic happens
-        /// </summary>
+        /// </summary> 
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void resizeButton_Click(object sender, EventArgs e)
         {
             // vars
-            String path = openLocation.Text;
+            string path = openLocation.Text;
+            string output;
             int resizeX, resizeY;
+            bool originSameAsLocation = false;
             Int64 quality = (Int64)jpegQualityBox.Value;
             float percentage = (float)resizePercentageBox.Value / 100;
 
-            // if the file does in fact still exist
-            if (File.Exists(path))
-            {
-                var img = Image.FromFile(path);
-
-                resizeX = (int)(img.Width * percentage);
-                resizeY = (int)(img.Height * percentage);
-
-                using (Bitmap image = ResizeImage(img, resizeX, resizeY))
+                // if the file does in fact still exist
+                if (File.Exists(path))
                 {
-                    // FILENAMES
-                    string output = saveLocation.Text;
-                    ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
-                    // Create an Encoder object based on the GUID for the Quality parameter.  
-                    System.Drawing.Imaging.Encoder encoder = System.Drawing.Imaging.Encoder.Quality;
+                    var img = Image.FromFile(path, true);
+                    if (openLocation.Text == saveLocation.Text)
+                    {
+                        originSameAsLocation = true;
+                    }
+                    resizeX = (int) (img.Width * percentage);
+                    resizeY = (int) (img.Height * percentage);
 
-                    // Create an EncoderParameters object. 
-                    EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                    
+                    using (Bitmap image = ResizeImage(img, resizeX, resizeY))
+                    {
+                        // FILENAMES
+                        if (originSameAsLocation)
+                        {
+                            output = CreateTempFile();
+                        }
+                        else
+                        {
+                            output = saveLocation.Text;
+                        }
+                    
+                        ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+                        // Create an Encoder object based on the GUID for the Quality parameter.  
+                        System.Drawing.Imaging.Encoder encoder = System.Drawing.Imaging.Encoder.Quality;
 
-                    EncoderParameter myEncoderParameter = new EncoderParameter(encoder, quality);
-                    myEncoderParameters.Param[0] = myEncoderParameter;
-                    image.Save(output, jpgEncoder, myEncoderParameters);
+                        // Create an EncoderParameters object. 
+                        EncoderParameters myEncoderParameters = new EncoderParameters(1);
 
+                        EncoderParameter myEncoderParameter = new EncoderParameter(encoder, quality);
+                        myEncoderParameters.Param[0] = myEncoderParameter;
+                        image.Save(output, jpgEncoder, myEncoderParameters);
+
+                        if (originSameAsLocation)
+                        {
+                            img.Dispose();
+                            CopyTmpFile(output, saveLocation.Text);
+                        }
+                    }
+
+                    MessageBox.Show("Image resized successfully!", "Success!");
+                    
                 }
-
-
-                MessageBox.Show("Image resized successfully!", "Success!");
+                else
+                {
+                        MessageBox.Show("An Error Occured, please check your inputs.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                 }
             }
-            else
-            {
-                MessageBox.Show("An Error Occured, please check your inputs.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
-
-        // stuff to make the trackbar and box have the same values, probably not that important
+        // stuff to make the trackbar and box have the same values, probably not that important as box value is used anyway
         private void resizePercentageSlider_Scroll(object sender, EventArgs e)
         {
             resizePercentageBox.Value = resizePercentageSlider.Value;
