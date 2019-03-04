@@ -16,6 +16,7 @@ namespace jpgResizer
 {
     public partial class MainForm : Form
     {
+        // initialize variables in the form
         public MainForm()
         {
             InitializeComponent();
