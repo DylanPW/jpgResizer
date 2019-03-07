@@ -63,6 +63,41 @@ namespace jpgResizer
             return null;
         }
 
+        /// <summary>
+        /// Resize image by a percentage
+        /// </summary>
+        /// <param name="resizeX"></param>
+        /// <param name="resizeY"></param>
+        /// <param name="oldX"></param>
+        /// <param name="oldY"></param>
+        /// <param name="percentage"></param>
+        private static void GetResizeValuesPercentage(out int resizeX, out int resizeY, int oldX, int oldY, float percentage)
+        {
+            resizeX = (int)(oldX * percentage);
+            resizeY = (int)(oldY * percentage);
+        }
+
+
+        private static void GetResizeValuesLongEdge(out int resizeX, out int resizeY, int oldX, int oldY, int longEdge)
+        {
+            bool horizontal;
+            float ratio;
+            if (oldX < oldY)
+            {
+                horizontal = false;
+                ratio = oldY / oldX;
+                resizeX = (int)(oldX / ratio);
+                resizeY = longEdge;
+            }
+            else
+            {
+                horizontal = true;
+                ratio = oldX / oldY;
+                resizeX = longEdge;
+                resizeY = (int)(oldX / ratio);
+            }
+        }
+
         public static void ProcessImage(string path, string savePath, Int64 quality, float percentage)
         {
             string output;
@@ -77,9 +112,7 @@ namespace jpgResizer
                 {
                     originSameAsLocation = true;
                 }
-                resizeX = (int)(img.Width * percentage);
-                resizeY = (int)(img.Height * percentage);
-
+                GetResizeValuesPercentage(out resizeX, out resizeY, img.Width, img.Height, percentage);
 
                 using (Bitmap image = ImageManipulator.ResizeImage(img, resizeX, resizeY))
                 {
