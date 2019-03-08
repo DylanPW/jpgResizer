@@ -24,7 +24,7 @@ namespace jpgResizer
             resizePercentageSlider.Value = 100;
             jpegQualitySlider.Value = 100;
             jpegQualityBox.Value = 100;
-            versionLabel.Text = "Version 0.3";
+            versionLabel.Text = GlobVars.versionName + GlobVars.version;
         }
 
         /// <summary>
