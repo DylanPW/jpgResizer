@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Policy;
 
 namespace jpgResizer
 {
@@ -20,11 +21,17 @@ namespace jpgResizer
         public MainForm()
         {
             InitializeComponent();
-            resizePercentageBox.Value = 100;
-            resizePercentageSlider.Value = 100;
-            jpegQualitySlider.Value = 100;
-            jpegQualityBox.Value = 100;
+
+            resizePercentageBox.Value = GlobVars.defaultSliderValues;
+            resizePercentageSlider.Value = GlobVars.defaultSliderValues;
+            jpegQualitySlider.Value = GlobVars.defaultSliderValues;
+            jpegQualityBox.Value = GlobVars.defaultSliderValues;
             versionLabel.Text = GlobVars.versionName + GlobVars.version;
+            longEdgeBox.Maximum = Decimal.MaxValue;
+
+            sizeLabel.Text = GlobVars.resizeMode.ToString();
+
+            debugButton.Enabled = false;
         }
 
         /// <summary>
@@ -76,19 +83,41 @@ namespace jpgResizer
             // variables to use
             string path = openLocation.Text;
             string savePath = saveLocation.Text;
+            string debugPath = debugLocation.Text;
             Int64 quality = (Int64)jpegQualityBox.Value;
             float percentage = (float)resizePercentageBox.Value / 100;
+            int longEdge = (int) longEdgeBox.Value;
             if (path != "" && savePath != "")
             {
-                ImageManipulator.ProcessImage(path, savePath, quality, percentage);
+
+                if (debugCheckbox.Checked && debugPath != "")
+                {
+                    GlobVars.debugPath = debugPath;
+                    if (GlobVars.debugMode)
+                    {
+                        using (System.IO.StreamWriter file =
+                            new System.IO.StreamWriter(GlobVars.debugPath))
+                        {
+                            file.WriteLine("[INFO] Resizing Commencing!");
+                            file.Close();
+                        }
+                    }
+                }
+
+                if (percentageRadioButton.Checked && !longEdgeRadioButton.Checked)
+                {
+                    ImageManipulator.ProcessImage(path, savePath, quality, percentage);
+                }
+                else if (!percentageRadioButton.Checked && longEdgeRadioButton.Checked)
+                {
+                    ImageManipulator.ProcessImageLongEdge(path, savePath, quality, longEdge);
+                }
             }
             else
             {
                 MessageBox.Show("You must select a source and destination file.", "Error!", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
-            
-
         }
 
         // stuff to make the trackbar and box have the same values, probably not that important as box value is used anyway
@@ -109,6 +138,84 @@ namespace jpgResizer
         private void jpegQualityBox_ValueChanged(object sender, EventArgs e)
         {
             jpegQualitySlider.Value = (int)jpegQualityBox.Value;
+        }
+
+        /// <summary>
+        /// Radio button checked event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void percentageRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (percentageRadioButton.Checked)
+            {
+                resizePercentageSlider.Enabled = true;
+                resizePercentageBox.Enabled = true;
+                longEdgeBox.Enabled = false;
+            }
+            else if (longEdgeRadioButton.Checked)
+            {
+                resizePercentageSlider.Enabled = false;
+                resizePercentageBox.Enabled = false;
+                longEdgeBox.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Radio button checked event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void longEdgeRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (percentageRadioButton.Checked)
+            {
+                resizePercentageSlider.Enabled = true;
+                resizePercentageBox.Enabled = true;
+                longEdgeBox.Enabled = false;
+                GlobVars.resizeMode = 1;
+                sizeLabel.Text = GlobVars.resizeMode.ToString();
+            }
+            else if (longEdgeRadioButton.Checked)
+            {
+                resizePercentageSlider.Enabled = false;
+                resizePercentageBox.Enabled = false;
+                longEdgeBox.Enabled = true;
+                GlobVars.resizeMode = 2;
+                sizeLabel.Text = GlobVars.resizeMode.ToString();
+            }
+        }
+
+        /// <summary>
+        /// enable and disable the button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void debugCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            GlobVars.debugMode = debugCheckbox.Checked;
+            debugButton.Text = GlobVars.debugMode.ToString();
+            if(debugCheckbox.Checked)
+            {
+                debugButton.Enabled = true;
+            }
+            else
+            {
+                debugButton.Enabled = false;
+            }
+        }
+
+        private void debugButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text File|*.txt";
+            saveFileDialog.Title = "Save Debug Log";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName != "")
+            {
+                debugLocation.Text = saveFileDialog.FileName;
+            }
         }
     }
 }
