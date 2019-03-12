@@ -52,6 +52,7 @@
             this.debugLocation = new System.Windows.Forms.TextBox();
             this.debugButton = new System.Windows.Forms.Button();
             this.debugCheckbox = new System.Windows.Forms.CheckBox();
+            this.resizeLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resizePercentageSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.jpegQualitySlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resizePercentageBox)).BeginInit();
@@ -222,6 +223,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.resizeLabel);
             this.groupBox2.Controls.Add(this.sizeLabel);
             this.groupBox2.Location = new System.Drawing.Point(4, 82);
             this.groupBox2.Name = "groupBox2";
@@ -308,6 +310,15 @@
             this.debugCheckbox.UseVisualStyleBackColor = true;
             this.debugCheckbox.CheckedChanged += new System.EventHandler(this.debugCheckbox_CheckedChanged);
             // 
+            // resizeLabel
+            // 
+            this.resizeLabel.AutoSize = true;
+            this.resizeLabel.Location = new System.Drawing.Point(182, 16);
+            this.resizeLabel.Name = "resizeLabel";
+            this.resizeLabel.Size = new System.Drawing.Size(37, 13);
+            this.resizeLabel.TabIndex = 1;
+            this.resizeLabel.Text = "SIZE_";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,6 +382,7 @@
         private System.Windows.Forms.CheckBox debugCheckbox;
         private System.Windows.Forms.Button debugButton;
         private System.Windows.Forms.TextBox debugLocation;
+        private System.Windows.Forms.Label resizeLabel;
     }
 }
 

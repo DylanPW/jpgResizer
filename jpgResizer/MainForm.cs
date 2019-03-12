@@ -32,6 +32,9 @@ namespace jpgResizer
             sizeLabel.Text = GlobVars.resizeMode.ToString();
 
             debugButton.Enabled = false;
+
+            sizeLabel.Text = "Original image size: ";
+            resizeLabel.Text = "Resize image size: ";
         }
 
         /// <summary>
@@ -51,6 +54,12 @@ namespace jpgResizer
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 openLocation.Text = openFileDialog.FileName;
+            }
+            if (File.Exists(openFileDialog.FileName))
+            {
+                var img = Image.FromFile(openFileDialog.FileName);
+                sizeLabel.Text = "Original image size: " + img.Width + "x" + img.Height;
+                img.Dispose();
             }
         }
 
@@ -174,7 +183,6 @@ namespace jpgResizer
                 resizePercentageBox.Enabled = true;
                 longEdgeBox.Enabled = false;
                 GlobVars.resizeMode = 1;
-                sizeLabel.Text = GlobVars.resizeMode.ToString();
             }
             else if (longEdgeRadioButton.Checked)
             {
@@ -182,7 +190,6 @@ namespace jpgResizer
                 resizePercentageBox.Enabled = false;
                 longEdgeBox.Enabled = true;
                 GlobVars.resizeMode = 2;
-                sizeLabel.Text = GlobVars.resizeMode.ToString();
             }
         }
 
