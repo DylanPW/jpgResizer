@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
@@ -89,8 +88,8 @@ namespace jpgResizer
                 originX = img.Width;
                 originY = img.Height;
                 sizeLabel.Text = "Original image res: " + originX + "x" + originY;
-                resizePreview();
                 fileLoaded = true;
+                resizePreview();
                 img.Dispose();
             }
         }

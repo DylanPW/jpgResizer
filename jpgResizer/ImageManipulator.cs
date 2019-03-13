@@ -251,7 +251,6 @@ namespace jpgResizer
                 }
                 GlobVars.DebugMessage("[INFO]", "Image resized successfully!");
                 MessageBox.Show("Image resized successfully!", "Success!");
-
             }
             else
             {
