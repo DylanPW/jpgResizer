@@ -46,9 +46,7 @@ namespace jpgResizer
 
             return destImage;
         }
-
         
-
         /// <summary>
         /// Retrieves the image codec relevant to the format
         /// </summary>
@@ -75,7 +73,7 @@ namespace jpgResizer
         /// <param name="oldX"></param>
         /// <param name="oldY"></param>
         /// <param name="percentage"></param>
-        private static void GetResizeValuesPercentage(out int resizeX, out int resizeY, int oldX, int oldY, float percentage)
+        public static void GetResizeValuesPercentage(out int resizeX, out int resizeY, int oldX, int oldY, float percentage)
         {
             GlobVars.DebugMessage("[INFO]", "Calculating new values...");
             resizeX = (int)(oldX * percentage);
@@ -96,7 +94,7 @@ namespace jpgResizer
         /// <param name="oldY"></param>
         /// <param name="longEdge"></param>
         /// 
-        private static void GetResizeValuesLongEdge(out int resizeX, out int resizeY, int oldX, int oldY, int longEdge)
+        public static void GetResizeValuesLongEdge(out int resizeX, out int resizeY, int oldX, int oldY, int longEdge)
         {
             bool horizontal;
             double ratio;

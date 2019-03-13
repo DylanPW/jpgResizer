@@ -17,6 +17,11 @@ namespace jpgResizer
 {
     public partial class MainForm : Form
     {
+        //TODO: Put these somewhere more useful
+        private bool fileLoaded = false;
+        private int originX = 0;
+        private int originY = 0;
+        
         // initialize variables in the form
         public MainForm()
         {
@@ -33,8 +38,31 @@ namespace jpgResizer
 
             debugButton.Enabled = false;
 
-            sizeLabel.Text = "Original image size: ";
-            resizeLabel.Text = "Resize image size: ";
+            sizeLabel.Text = "Original image res: ";
+            resizeLabel.Text = "Resize image res: ";
+        }
+
+        /// <summary>
+        /// resize preview function
+        /// </summary>
+        private void resizePreview()
+        {
+            if (fileLoaded)
+            {
+                int resizeX = 0, resizeY = 0;
+                // RESIZE MODES:
+                // PERCENTAGE = 1
+                // LONG EDGE = 2
+                if (GlobVars.resizeMode == 1)
+                {
+                    ImageManipulator.GetResizeValuesPercentage(out resizeX, out resizeY, originX, originY, (float)resizePercentageBox.Value / 100);
+                }
+                else if (GlobVars.resizeMode == 2)
+                {
+                    ImageManipulator.GetResizeValuesLongEdge(out resizeX, out resizeY, originX, originY, (int)longEdgeBox.Value);
+                }
+                resizeLabel.Text = "Resize image res: " + resizeX + "x" + resizeY;
+            }
         }
 
         /// <summary>
@@ -58,7 +86,11 @@ namespace jpgResizer
             if (File.Exists(openFileDialog.FileName))
             {
                 var img = Image.FromFile(openFileDialog.FileName);
-                sizeLabel.Text = "Original image size: " + img.Width + "x" + img.Height;
+                originX = img.Width;
+                originY = img.Height;
+                sizeLabel.Text = "Original image res: " + originX + "x" + originY;
+                resizePreview();
+                fileLoaded = true;
                 img.Dispose();
             }
         }
@@ -129,21 +161,29 @@ namespace jpgResizer
             }
         }
 
-        // stuff to make the trackbar and box have the same values, probably not that important as box value is used anyway
+        /// <summary>
+        /// stuff to make the trackbar and box have the same values, probably not that important as box value is used anyway
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void resizePercentageSlider_Scroll(object sender, EventArgs e)
         {
             resizePercentageBox.Value = resizePercentageSlider.Value;
+        }
+        private void resizePercentageBox_ValueChanged(object sender, EventArgs e)
+        {
+            resizePercentageSlider.Value = (int)resizePercentageBox.Value;
+            resizePreview();
+        }
+        private void longEdgeBox_ValueChanged(object sender, EventArgs e)
+        {
+            resizePreview();
         }
 
         private void jpegQualitySlider_Scroll(object sender, EventArgs e)
         {
             jpegQualityBox.Value = jpegQualitySlider.Value;
         }
-        private void resizePercentageBox_ValueChanged(object sender, EventArgs e)
-        {
-            resizePercentageSlider.Value = (int)resizePercentageBox.Value;
-        }
-
         private void jpegQualityBox_ValueChanged(object sender, EventArgs e)
         {
             jpegQualitySlider.Value = (int)jpegQualityBox.Value;

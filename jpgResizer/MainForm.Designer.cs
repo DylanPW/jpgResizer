@@ -45,6 +45,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.longEdgeBox = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.resizeLabel = new System.Windows.Forms.Label();
             this.sizeLabel = new System.Windows.Forms.Label();
             this.longEdgeRadioButton = new System.Windows.Forms.RadioButton();
             this.percentageRadioButton = new System.Windows.Forms.RadioButton();
@@ -52,7 +53,6 @@
             this.debugLocation = new System.Windows.Forms.TextBox();
             this.debugButton = new System.Windows.Forms.Button();
             this.debugCheckbox = new System.Windows.Forms.CheckBox();
-            this.resizeLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resizePercentageSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.jpegQualitySlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resizePercentageBox)).BeginInit();
@@ -220,6 +220,7 @@
             this.longEdgeBox.Name = "longEdgeBox";
             this.longEdgeBox.Size = new System.Drawing.Size(244, 20);
             this.longEdgeBox.TabIndex = 16;
+            this.longEdgeBox.ValueChanged += new System.EventHandler(this.longEdgeBox_ValueChanged);
             // 
             // groupBox2
             // 
@@ -231,6 +232,15 @@
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Resulting Size:";
+            // 
+            // resizeLabel
+            // 
+            this.resizeLabel.AutoSize = true;
+            this.resizeLabel.Location = new System.Drawing.Point(182, 16);
+            this.resizeLabel.Name = "resizeLabel";
+            this.resizeLabel.Size = new System.Drawing.Size(37, 13);
+            this.resizeLabel.TabIndex = 1;
+            this.resizeLabel.Text = "SIZE_";
             // 
             // sizeLabel
             // 
@@ -309,15 +319,6 @@
             this.debugCheckbox.Text = "Debug Mode";
             this.debugCheckbox.UseVisualStyleBackColor = true;
             this.debugCheckbox.CheckedChanged += new System.EventHandler(this.debugCheckbox_CheckedChanged);
-            // 
-            // resizeLabel
-            // 
-            this.resizeLabel.AutoSize = true;
-            this.resizeLabel.Location = new System.Drawing.Point(182, 16);
-            this.resizeLabel.Name = "resizeLabel";
-            this.resizeLabel.Size = new System.Drawing.Size(37, 13);
-            this.resizeLabel.TabIndex = 1;
-            this.resizeLabel.Text = "SIZE_";
             // 
             // MainForm
             // 

@@ -48,20 +48,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
+  <!-- <PropertyGroup>
     <ManifestCertificateThumbprint>7CD4A622741E791FD7754DE2CE27C6BCE1DFB35B</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
+  </PropertyGroup> -->
+  <!-- <PropertyGroup>
     <ManifestKeyFile>jpgResizer_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup> -->
+  <!-- <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
-  </PropertyGroup>
+  </PropertyGroup> -->
   <PropertyGroup>
     <ApplicationIcon>resize.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -101,6 +107,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="jpgResizer_TemporaryKey.pfx" />
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
