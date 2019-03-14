@@ -66,9 +66,29 @@ namespace jpgResizer
         }
 
         /// <summary>
+        /// Recursive function to return gcd  
+        /// of a and b 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        static float gcd(double a, double b)
+        {
+            if (a < b)
+                return gcd(b, a);
+
+            // base case 
+            if (Math.Abs(b) < 0.001)
+                return (float)a;
+
+            else
+                return (float)(gcd(b, a - Math.Floor(a / b) * b));
+        }
+
+        /// <summary>
         /// Resize image by a percentage
         /// </summary>
-        /// <param name="resizeX"></param>
+        /// <param name="resizeX"></param> 
         /// <param name="resizeY"></param>
         /// <param name="oldX"></param>
         /// <param name="oldY"></param>
@@ -97,16 +117,17 @@ namespace jpgResizer
         public static void GetResizeValuesLongEdge(out int resizeX, out int resizeY, int oldX, int oldY, int longEdge)
         {
             bool horizontal;
-            double ratio;
+            int difference;
+            float percentage;
             GlobVars.DebugMessage("[INFO]", "Calculating new values...");
             if (oldX < oldY)
             {
                 horizontal = false;
-                ratio = (double)oldY / (double)longEdge;
-                resizeX = (int)(oldX / ratio);
-                resizeY = longEdge;
+                difference = oldY - longEdge; 
+                percentage = (float)difference / (float)oldY;
+                GetResizeValuesPercentage(out resizeX, out resizeY, oldX, oldY, percentage);
                 GlobVars.DebugMessage("[INFO]", string.Format("Image is Portrait"));
-                GlobVars.DebugMessage("[INFO]", string.Format("Ratio is {0:0.0000}", ratio));
+                GlobVars.DebugMessage("[INFO]", string.Format("Percentage is {0:P2}", percentage));
                 GlobVars.DebugMessage("[INFO]", string.Format("Old X is {0}", oldX));
                 GlobVars.DebugMessage("[INFO]", string.Format("Old Y is {0}", oldY));
                 GlobVars.DebugMessage("[INFO]", string.Format("New X is {0}", resizeX));
@@ -115,11 +136,11 @@ namespace jpgResizer
             else
             {
                 horizontal = true;
-                ratio = (double)oldX / (double)longEdge;
-                resizeX = longEdge;
-                resizeY = (int)(oldY / ratio);
+                difference = oldX - longEdge;
+                percentage = (float)difference / (float) oldX;
+                GetResizeValuesPercentage(out resizeX, out resizeY, oldX, oldY, percentage);
                 GlobVars.DebugMessage("[INFO]", string.Format("Image is landscape"));
-                GlobVars.DebugMessage("[INFO]", string.Format("Ratio is {0:0.0000}", ratio));
+                GlobVars.DebugMessage("[INFO]", string.Format("Percentage is {0:P2}", percentage));
                 GlobVars.DebugMessage("[INFO]", string.Format("Old X is {0}", oldX));
                 GlobVars.DebugMessage("[INFO]", string.Format("Old Y is {0}", oldY));
                 GlobVars.DebugMessage("[INFO]", string.Format("New X is {0}", resizeX));
@@ -134,7 +155,6 @@ namespace jpgResizer
         /// <param name="savePath"></param>
         /// <param name="quality"></param>
         /// <param name="percentage"></param>
-    
         public static void ProcessImage(string path, string savePath, Int64 quality, float percentage)
         {
             string output;
