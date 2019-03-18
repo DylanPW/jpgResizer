@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Policy;
 
+
 namespace jpgResizer
 {
     public partial class MainForm : Form
@@ -20,7 +21,10 @@ namespace jpgResizer
         private bool fileLoaded = false;
         private int originX = 0;
         private int originY = 0;
-        
+
+        private static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" };
+
+
         // initialize variables in the form
         public MainForm()
         {
@@ -39,7 +43,7 @@ namespace jpgResizer
 
             this.AllowDrop = true;
             this.DragOver += new DragEventHandler(MainForm_DragOver);
-            this.DragEnter += new DragEventHandler(MainForm_DragEnter);
+            this.DragDrop += new DragEventHandler(MainForm_DragDrop);
 
             sizeLabel.Text = "Original image res: ";
             resizeLabel.Text = "Resize image res: ";
@@ -281,11 +285,21 @@ namespace jpgResizer
                 
         }
 
-        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
             if (files != null && files.Any())
-                openLocation.Text = files.First(); //select the first one  
+            {
+                if (ImageExtensions.Contains(Path.GetExtension(files.First()).ToUpperInvariant()))
+                {
+                    openLocation.Text = files.First();
+                } else {
+                    MessageBox.Show("Invalid File Type!", "Error!", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+                
+                    
         }
     }
 }
