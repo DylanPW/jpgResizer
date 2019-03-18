@@ -37,6 +37,10 @@ namespace jpgResizer
 
             debugButton.Enabled = false;
 
+            this.AllowDrop = true;
+            this.DragOver += new DragEventHandler(MainForm_DragOver);
+            this.DragEnter += new DragEventHandler(MainForm_DragEnter);
+
             sizeLabel.Text = "Original image res: ";
             resizeLabel.Text = "Resize image res: ";
         }
@@ -262,6 +266,26 @@ namespace jpgResizer
             {
                 debugLocation.Text = saveFileDialog.FileName;
             }
+        }
+
+        private void MainForm_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+                
+        }
+
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
+            if (files != null && files.Any())
+                openLocation.Text = files.First(); //select the first one  
         }
     }
 }
