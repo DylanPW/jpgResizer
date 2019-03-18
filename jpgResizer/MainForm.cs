@@ -72,6 +72,20 @@ namespace jpgResizer
             }
         }
 
+        private void originalPreview(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                var img = Image.FromFile(filePath);
+                originX = img.Width;
+                originY = img.Height;
+                sizeLabel.Text = "Original image res: " + originX + "x" + originY;
+                fileLoaded = true;
+                resizePreview();
+                img.Dispose();
+            }
+
+        }
         /// <summary>
         /// Click event for the file open button.
         /// </summary>
@@ -90,16 +104,7 @@ namespace jpgResizer
             {
                 openLocation.Text = openFileDialog.FileName;
             }
-            if (File.Exists(openFileDialog.FileName))
-            {
-                var img = Image.FromFile(openFileDialog.FileName);
-                originX = img.Width;
-                originY = img.Height;
-                sizeLabel.Text = "Original image res: " + originX + "x" + originY;
-                fileLoaded = true;
-                resizePreview();
-                img.Dispose();
-            }
+            originalPreview(openFileDialog.FileName);
         }
 
         /// <summary>
@@ -292,14 +297,13 @@ namespace jpgResizer
             {
                 if (ImageExtensions.Contains(Path.GetExtension(files.First()).ToUpperInvariant()))
                 {
+                    originalPreview((files.First()));
                     openLocation.Text = files.First();
                 } else {
                     MessageBox.Show("Invalid File Type!", "Error!", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
             }
-                
-                    
         }
     }
 }
