@@ -4,7 +4,7 @@ namespace jpgResizer
 {
     public static class GlobVars
     {
-        public const string version = "0.4";
+        public const string version = "0.5c";
         public const string versionName = "Version ";
         public const int defaultSliderValues = 100;
         public static int resizeMode = 1;

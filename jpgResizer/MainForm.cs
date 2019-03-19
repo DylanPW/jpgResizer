@@ -72,6 +72,11 @@ namespace jpgResizer
             }
         }
 
+
+        /// <summary>
+        /// Generate a preview of the original image size
+        /// </summary>
+        /// <param name="filePath"></param>
         private void originalPreview(string filePath)
         {
             if (File.Exists(filePath))
